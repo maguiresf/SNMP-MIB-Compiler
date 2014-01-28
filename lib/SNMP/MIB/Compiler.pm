@@ -1341,8 +1341,21 @@ sub parse_type {
     } elsif ( $token == $IDENTIFIER || $token == $TYPEMODREFERENCE ) {
         my $type    = $value;
         my $subtype = $self->parse_subtype();
-        $$subtype{'type'} = $type;
-        return $subtype;
+
+        my $ref = ref $subtype;
+        if ( defined $ref && $ref eq 'HASH' ) {
+            $$subtype{'type'} = $type;
+            return $subtype;
+        } else {
+            if ( defined $subtype ) {
+                return {
+                    'values' => $subtype,
+                    'type'   => $type
+                };
+            } else {
+                return { 'type' => $type };
+            }
+        }
     } else {
         return $self->assert( MIBERROR, $self->{'filename'},
             $self->{'lineno'}, "Syntax error at '$value'" );
