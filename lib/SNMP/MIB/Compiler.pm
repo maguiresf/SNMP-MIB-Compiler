@@ -1048,7 +1048,7 @@ sub parse_subtype {
     (($token, $value) = $self->get_token()) || return;
     if ($token == $SIZE) {
       my $subtype = $self->parse_subtype();
-      return unless $subtype;
+      return unless defined $subtype;
       $self->get_token(')') || return;
       return { 'size' => $subtype };
     }

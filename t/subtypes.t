@@ -8,7 +8,7 @@ use Data::Compare;
 
 local $^W = 1;
 
-print "1..9\n";
+print "1..10\n";
 my $t = 1;
 
 my $mib = new SNMP::MIB::Compiler();
@@ -68,6 +68,11 @@ $good = { 'size' => { 'choice' =>
 		      [ 1, { 'range' => { 'min' => 4, 'max' => 85 } } ] } };
 print Compare($res, $good) ? "" : "not ", "ok ", $t++, "\n";
 
+# Test 10 : (SIZE (0))
+$res = $mib->parse_subtype();
+$good = { 'size' => '0' };
+print Compare($res, $good) ? "" : "not ", "ok ", $t++, "\n";
+
 # end
 
 __DATA__
@@ -91,3 +96,5 @@ __DATA__
 (1 | 3..5 | 7)
 
 (SIZE (1 | 4..85))
+
+(SIZE (0))
