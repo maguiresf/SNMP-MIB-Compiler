@@ -524,6 +524,8 @@ sub initialize {
     $self->{'make_dump'} = 1;
     $self->{'use_dump'}  = 1;
 
+    $self->{'verbose_errors'} = 0;
+
     $self->{'accept_smiv1'} = 1;
     $self->{'accept_smiv2'} = 1;
 
@@ -537,6 +539,10 @@ sub assert {
     my $file  = shift;
     my $line  = shift;
     my $msg   = shift;
+
+    if ($self->{verbose_errors}){
+        warn "ERROR: $file:$line - $msg\n";
+    }
 
     if ( defined $level ) {
         $self->{'msg'} = [] unless defined $self->{'msg'};
@@ -724,6 +730,8 @@ sub compile {
         $mib->{'debug_recursive'} = $self->{'debug_recursive'};
         $mib->{'debug_lexer'}     = $self->{'debug_lexer'};
     }
+
+    $mib->{'verbose_errors'} = $self->{'verbose_errors'};
 
     # create a stream
     my $s = Stream->new($fh);
